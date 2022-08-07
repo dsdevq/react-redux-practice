@@ -1,18 +1,24 @@
-import React from "react"
-import { useSelector } from "react-redux/es/exports"
+import React, { useEffect } from "react"
+import { useSelector, useDispatch } from "react-redux/es/exports"
 import { User } from "./User"
+import { fetchUsers, selectAllUsers } from "../featured/users/usersSlice"
 
 export const UserList = () => {
-	const users = useSelector((state) => state.users)
-	return (
-		<>
-			<div>UserList</div>
+	const dispatch = useDispatch()
+	const users = useSelector(selectAllUsers)
 
+	useEffect(() => {
+		dispatch(fetchUsers())
+		console.log("render")
+	}, [dispatch])
+
+	return (
+		<div className='user-list'>
 			{users.length ? (
 				users.map((user) => <User key={user.id} {...user} />)
 			) : (
 				<p>No users</p>
 			)}
-		</>
+		</div>
 	)
 }

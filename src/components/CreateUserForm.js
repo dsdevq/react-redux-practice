@@ -13,13 +13,10 @@ export const CreateUserForm = () => {
 			username: e.target[1].value,
 			email: e.target[2].value,
 		}
-
-		console.log(newUser)
 		dispatch(create(newUser))
-		e.target.reset()
 	}
 	return (
-		<form onSubmit={handleSubmit}>
+		<form className='form' onSubmit={handleSubmit}>
 			<label htmlFor='username'>Username</label>
 			<input defaultValue='TBH' type='text' id='username' />
 			<label htmlFor='name'>Name</label>

@@ -3,14 +3,7 @@ import { UserList } from "./components/UserList"
 
 function App() {
 	return (
-		<div
-			style={{
-				display: "flex",
-				flexDirection: "column",
-				alignItems: "center",
-				gap: "1rem",
-			}}
-			className='App'>
+		<div className='App'>
 			<CreateUserForm />
 			<UserList />
 		</div>
