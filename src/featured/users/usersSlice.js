@@ -1,24 +1,37 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 
-const userAPI = {
-	fetchUsers: "https://jsonplaceholder.typicode.com/users?_limit=10",
-}
+const userAPI = "https://jsonplaceholder.typicode.com/users"
 
 export const fetchUsers = createAsyncThunk("users/fetchUsers", async () => {
-	const response = await fetch(userAPI.fetchUsers)
+	try {
+		const response = await fetch(userAPI + "?_limit=10")
+		const result = await response.json()
+		return result
+	} catch (e) {
+		console.log("Error!", e)
+	}
+})
+export const postUser = createAsyncThunk("users/postUser", async (action) => {
+	const response = await fetch(userAPI, {
+		method: "POST",
+		body: JSON.stringify(action),
+		headers: {
+			"Content-type": "application/json; charset=UTF-8",
+		},
+	})
 	const result = await response.json()
+	console.log(action)
+	console.log(result)
 	return result
 })
 export const deleteUsers = createAsyncThunk(
 	"users/deleteUsers",
 	async (action) => {
-		await fetch(`https://jsonplaceholder.typicode.com/users/${action}`, {
+		await fetch(`${userAPI}/${action}`, {
 			method: "DELETE",
 		})
 		// Return action because DELETE request return nothing
-		return new Promise((resolve, reject) => {
-			resolve(action)
-		})
+		return action
 	}
 )
 
@@ -28,24 +41,13 @@ const initialState = {
 	error: null,
 }
 
+// createSlice is a function that accepts an initial state, an object of reducer functions, and a "slice name", and automatically generates action creators and action types that correspond to the reducers and state.
+// This API is the standard approach for writing Redux logic.
+// Internally, it uses createAction and createReducer , so you may also use Immer to write "mutating" immutable updates:
 export const usersSlice = createSlice({
 	name: "users",
 	initialState,
-	reducers: {
-		//! Redux Toolkit allows us to write "mutating" logic in reducers. It
-		//# doesn't actually mutate the state because it uses the Immer library,
-		//& which detects changes to a "draft state" and produces a brand new
-		//* immutable state based off those changes
-		create: (state, action) => {
-			state.users.push(action.payload)
-		},
-		deleteUser: (state, action) => {
-			return {
-				...state,
-				users: state.users.filter((user) => user.id !== action.payload),
-			}
-		},
-	},
+	reducers: {},
 	extraReducers: (builder) => {
 		// Add reducers for additional action types here, and handle loading state as needed
 		//! GET
@@ -61,7 +63,14 @@ export const usersSlice = createSlice({
 			})
 			// ! DELETE
 			.addCase(deleteUsers.fulfilled, (state, action) => {
-				// return { ...state }
+				return {
+					...state,
+					users: state.users.filter((user) => user.id !== action.payload),
+				}
+			})
+			// * POST
+			.addCase(postUser.fulfilled, (state, action) => {
+				state.users.push({ ...action.payload, id: Date.now() })
 			})
 	},
 })

@@ -1,6 +1,6 @@
 import React from "react"
 import { useDispatch } from "react-redux"
-import { create } from "../featured/users/usersSlice"
+import { postUser } from "../featured/users/usersSlice"
 
 export const CreateUserForm = () => {
 	const dispatch = useDispatch()
@@ -13,7 +13,11 @@ export const CreateUserForm = () => {
 			username: e.target[1].value,
 			email: e.target[2].value,
 		}
-		dispatch(create(newUser))
+		dispatch(postUser(newUser)).then(() => {
+			e.target[0].value = ""
+			e.target[1].value = ""
+			e.target[2].value = ""
+		})
 	}
 	return (
 		<form className='form' onSubmit={handleSubmit}>

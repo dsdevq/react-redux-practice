@@ -8,8 +8,9 @@ export const UserList = () => {
 	const users = useSelector(selectAllUsers)
 
 	useEffect(() => {
-		dispatch(fetchUsers())
-		console.log("render")
+		dispatch(fetchUsers()).then((data) =>
+			console.log("DATA FETCHED!", data.payload)
+		)
 	}, [dispatch])
 
 	return (
