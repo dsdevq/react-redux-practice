@@ -7,17 +7,19 @@ export const CreateUserForm = () => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
-		const newUser = {
-			id: Date.now(),
-			name: e.target[0].value,
-			username: e.target[1].value,
-			email: e.target[2].value,
-		}
-		dispatch(postUser(newUser)).then(() => {
-			e.target[0].value = ""
-			e.target[1].value = ""
-			e.target[2].value = ""
-		})
+		if (e.target[0].value && e.target[1].value && e.target[2].value) {
+			const newUser = {
+				id: Date.now(),
+				name: e.target[0].value,
+				username: e.target[1].value,
+				email: e.target[2].value,
+			}
+			dispatch(postUser(newUser)).then(() => {
+				e.target[0].value = ""
+				e.target[1].value = ""
+				e.target[2].value = ""
+			})
+		} else alert("Fill the form!")
 	}
 	return (
 		<form className='form' onSubmit={handleSubmit}>

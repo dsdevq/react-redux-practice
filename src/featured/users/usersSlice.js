@@ -20,8 +20,6 @@ export const postUser = createAsyncThunk("users/postUser", async (action) => {
 		},
 	})
 	const result = await response.json()
-	console.log(action)
-	console.log(result)
 	return result
 })
 export const deleteUsers = createAsyncThunk(
@@ -61,14 +59,14 @@ export const usersSlice = createSlice({
 						: state.users.push(item)
 				)
 			})
-			// ! DELETE
+			//! DELETE
 			.addCase(deleteUsers.fulfilled, (state, action) => {
 				return {
 					...state,
 					users: state.users.filter((user) => user.id !== action.payload),
 				}
 			})
-			// * POST
+			//! POST
 			.addCase(postUser.fulfilled, (state, action) => {
 				state.users.push({ ...action.payload, id: Date.now() })
 			})
