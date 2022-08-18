@@ -74,7 +74,6 @@ export const usersSlice = createSlice({
 })
 
 //!!!! Action creators are generated for each case reducer function
-export const { create, deleteUser } = usersSlice.actions
 
 export const selectAllUsers = (state) => state.users.users
 
